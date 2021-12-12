@@ -3,11 +3,11 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import Head from "next/head";
 
-const Home: NextPage = () => {
+const About: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Twitter ETH</title>
+        <title>Twitter ETH - About</title>
         <meta name="description" content="Twitter ETH" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -17,11 +17,11 @@ const Home: NextPage = () => {
         alignItems="center"
         minH="100vh"
       >
-        <Text>Hello World!</Text>
-        <Link href="/about">⇨About</Link>
+        <Text>About!</Text>
+        <Link href="/">⇨Back</Link>
       </Flex>
     </div>
   );
 };
 
-export default Home;
+export default About;

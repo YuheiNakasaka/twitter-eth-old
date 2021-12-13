@@ -1,6 +1,5 @@
 import { Flex, Text } from "@chakra-ui/react";
 import type { NextPage } from "next";
-import Link from "next/link";
 import Head from "next/head";
 
 const Home: NextPage = () => {
@@ -18,7 +17,6 @@ const Home: NextPage = () => {
         minH="100vh"
       >
         <Text>Hello World!</Text>
-        <Link href="/about">⇨About</Link>
       </Flex>
     </div>
   );

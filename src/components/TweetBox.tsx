@@ -68,7 +68,7 @@ export const TweetBox = ({
             />
           </Flex>
         )}
-        <Flex justifyContent="center" mt="1rem">
+        <Flex justifyContent="end" mt="1rem">
           {onClickLike && (
             <FlatButton
               onClick={() => {

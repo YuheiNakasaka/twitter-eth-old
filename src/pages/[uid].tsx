@@ -183,7 +183,7 @@ const MainContent = () => {
               <Box w="100%" px="1rem" p="1rem">
                 <Flex mb="1rem">
                   <Box>
-                    <Link href={`/${uid}/followings`}>
+                    <Link href={`/${uid}/followings`} passHref>
                       <FlatButton>
                         <Text>
                           {followings}{" "}
@@ -195,7 +195,7 @@ const MainContent = () => {
                     </Link>
                   </Box>
                   <Box ml="1rem">
-                    <Link href={`/${uid}/followers`}>
+                    <Link href={`/${uid}/followers`} passHref>
                       <FlatButton onClick={() => {}}>
                         <Text>
                           {followers}{" "}
@@ -246,7 +246,12 @@ const MainContent = () => {
                 </Box>
               ) : (
                 tweets.map((tweet: Tweet) => (
-                  <TweetBox tweet={tweet} key={tweet.timestamp} />
+                  <TweetBox
+                    tweet={tweet}
+                    key={tweet.timestamp}
+                    onClickLike={async () => {}}
+                    onClickRT={async () => {}}
+                  />
                 ))
               )}
             </Box>

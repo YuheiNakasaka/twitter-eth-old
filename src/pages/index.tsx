@@ -17,12 +17,11 @@ import { Button } from "@chakra-ui/button";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Tweet } from "models/tweet";
 import { SideBar, HeaderTabType } from "components/Sidebar";
-import { utils, Contract, ethers } from "ethers";
-import ABI from "resources/twitter-abi.json";
 import { TweetBox } from "components/TweetBox";
 import { FlatButton } from "components/FlatButton";
 import { FiImage } from "react-icons/fi";
 import { AiFillCloseCircle } from "react-icons/ai";
+import { contractClient, contractProvider } from "utils/contract_client";
 
 const MainContent = () => {
   const toast = useToast();
@@ -39,12 +38,7 @@ const MainContent = () => {
     limit: number
   ): Promise<Tweet[]> => {
     if (library !== undefined && account) {
-      const inteface = new utils.Interface(ABI.abi);
-      const contract = new Contract(
-        `${process.env.NEXT_PUBLIC_TWITTER_ETH_CONTRACT_ID}`,
-        inteface,
-        library?.getSigner()
-      );
+      const contract = contractClient(library);
       const tweets = await contract.getTimeline(offset, limit);
       return tweets.map((tweet: any) => {
         return {
@@ -53,6 +47,7 @@ const MainContent = () => {
           author: tweet.author,
           timestamp: tweet.timestamp.toNumber() * 1000,
           attachment: tweet.attachment || "",
+          likes: tweet.likes,
         };
       });
     } else {
@@ -66,12 +61,7 @@ const MainContent = () => {
     tweetInputImage: string
   ): Promise<boolean> => {
     if (library !== undefined && account) {
-      const inteface = new utils.Interface(ABI.abi);
-      const contract = new Contract(
-        `${process.env.NEXT_PUBLIC_TWITTER_ETH_CONTRACT_ID}`,
-        inteface,
-        library?.getSigner()
-      );
+      const contract = contractClient(library);
       return await contract
         .setTweet(tweet, tweetInputImage)
         .then(() => true)
@@ -91,6 +81,19 @@ const MainContent = () => {
     }
   };
 
+  const addLike = async (tweet: Tweet): Promise<boolean> => {
+    if (library !== undefined && account) {
+      const contract = contractClient(library);
+      return await contract
+        .addLike(tweet.tokenId)
+        .then(() => true)
+        .catch((_) => false);
+    } else {
+      console.log("Library is undefined");
+      return false;
+    }
+  };
+
   const updateTweets = async () => {
     const tweets: Tweet[] = await getTimelineTweets(0, 100);
     setTweets(tweets);
@@ -98,13 +101,8 @@ const MainContent = () => {
 
   const subscribeTweeted = async () => {
     if (library !== undefined && account) {
-      const inteface = new utils.Interface(ABI.abi);
-      const contract = new Contract(
-        `${process.env.NEXT_PUBLIC_TWITTER_ETH_CONTRACT_ID}`,
-        inteface,
-        library?.getSigner()
-      );
-      const provider = new ethers.providers.Web3Provider(library.provider);
+      const contract = contractClient(library);
+      const provider = contractProvider(library);
       const filters = contract.filters["Tweeted"];
       if (filters !== undefined) {
         provider.once("block", () => {
@@ -302,7 +300,12 @@ const MainContent = () => {
                 </Box>
               ) : (
                 tweets.map((tweet: Tweet) => (
-                  <TweetBox tweet={tweet} key={tweet.timestamp} />
+                  <TweetBox
+                    tweet={tweet}
+                    key={tweet.timestamp}
+                    onClickLike={async () => addLike(tweet)}
+                    onClickRT={async () => addLike(tweet)}
+                  />
                 ))
               )}
             </Box>

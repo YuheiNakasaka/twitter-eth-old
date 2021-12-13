@@ -4,4 +4,5 @@ export interface Tweet {
   author: string;
   timestamp: number;
   attachment: string;
+  likes: number[]; // array of user addresses
 }

@@ -97,7 +97,10 @@ const MainContent = () => {
                   >
                     <Box p="1rem">
                       <Flex mb="0.2rem">
-                        <Link href={`/playgrounds/twitter_eth/${user.id}`}>
+                        <Link
+                          href={`/playgrounds/twitter_eth/${user.id}`}
+                          passHref
+                        >
                           <FlatButton>
                             <Text
                               fontSize="0.9rem"

@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { Flex, Box, Text, Image } from "@chakra-ui/react";
+import { Flex, Box, Text, Image, Icon } from "@chakra-ui/react";
 import { FlatButton } from "components/FlatButton";
 import { Tweet } from "models/tweet";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { AiFillHeart, AiOutlineHeart, AiOutlineRetweet } from "react-icons/ai";
+import { useState } from "react";
 dayjs.extend(relativeTime);
 
 export const HeaderTabType = {
@@ -13,9 +15,13 @@ export const HeaderTabType = {
 
 interface TweetBoxProps {
   tweet: Tweet;
+  onClickLike: () => Promise<boolean>;
+  onClickRT: () => Promise<boolean>;
 }
 
-export const TweetBox = ({ tweet }: TweetBoxProps) => {
+export const TweetBox = ({ tweet, onClickLike, onClickRT }: TweetBoxProps) => {
+  const [isLiked, setIsLiked] = useState(tweet.likes.length > 0);
+  const [likeCount, setLikeCount] = useState(tweet.likes.length);
   return (
     <Box
       key={tweet.timestamp}
@@ -30,7 +36,7 @@ export const TweetBox = ({ tweet }: TweetBoxProps) => {
     >
       <Box p="1rem">
         <Flex mb="0.2rem">
-          <Link href={`/playgrounds/twitter_eth/${tweet.author}`}>
+          <Link href={`/playgrounds/twitter_eth/${tweet.author}`} passHref>
             <FlatButton>
               <Text fontSize="0.9rem" fontWeight="bold" isTruncated>
                 {tweet.author}
@@ -56,6 +62,37 @@ export const TweetBox = ({ tweet }: TweetBoxProps) => {
             />
           </Flex>
         )}
+        <Flex justifyContent="center" mt="1rem">
+          <FlatButton
+            onClick={() => {
+              if (!isLiked) {
+                onClickLike()
+                  .then((e) => {
+                    if (e) {
+                      setIsLiked(true);
+                      setLikeCount(likeCount + 1);
+                    }
+                  })
+                  .catch((e) => setIsLiked(false));
+              }
+            }}
+          >
+            <Flex>
+              <Icon
+                as={isLiked ? AiFillHeart : AiOutlineHeart}
+                fontSize="1.4rem"
+                color={isLiked ? "rgb(249, 24, 128)" : "rgb(83, 100, 113)"}
+                mr="0.5rem"
+              />
+              <Text
+                fontSize="0.9rem"
+                color={isLiked ? "rgb(249, 24, 128)" : "rgb(83, 100, 113)"}
+              >
+                {likeCount}
+              </Text>
+            </Flex>
+          </FlatButton>
+        </Flex>
       </Box>
     </Box>
   );

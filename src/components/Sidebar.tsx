@@ -41,7 +41,7 @@ export const SideBar = ({ account, type }: SideBarProps) => {
           xl: "1rem",
         }}
       >
-        <Link href={`/`}>
+        <Link href={`/`} passHref>
           <FlatButton>
             <Icon
               as={BsTwitter}
@@ -53,7 +53,7 @@ export const SideBar = ({ account, type }: SideBarProps) => {
           </FlatButton>
         </Link>
       </Flex>
-      <Link href={`/`}>
+      <Link href={`/`} passHref>
         <FlatButton>
           <Flex
             p={{
@@ -80,7 +80,7 @@ export const SideBar = ({ account, type }: SideBarProps) => {
         </FlatButton>
       </Link>
       {account && (
-        <Link href={`/${account}`}>
+        <Link href={`/${account}`} passHref>
           <FlatButton>
             <Flex
               p={{

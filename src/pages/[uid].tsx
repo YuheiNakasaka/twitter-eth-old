@@ -7,11 +7,10 @@ import { Button } from "@chakra-ui/button";
 import { useEffect, useState } from "react";
 import { Tweet } from "models/tweet";
 import { SideBar, HeaderTabType } from "components/Sidebar";
-import { utils, Contract } from "ethers";
-import ABI from "resources/twitter-abi.json";
 import { TweetBox } from "components/TweetBox";
 import { FlatButton } from "components/FlatButton";
 import { useRouter } from "next/router";
+import { contractClient } from "utils/contract_client";
 
 const MainContent = () => {
   const router = useRouter();
@@ -26,20 +25,13 @@ const MainContent = () => {
 
   const getUserTweets = async (address: string): Promise<Tweet[]> => {
     if (library !== undefined) {
-      const inteface = new utils.Interface(ABI.abi);
-      const contract = new Contract(
-        `${process.env.NEXT_PUBLIC_TWITTER_ETH_CONTRACT_ID}`,
-        inteface,
-        library?.getSigner()
-      );
+      const contract = contractClient(library);
       const tweets = await contract.getUserTweets(address);
       return tweets.map((tweet: any) => {
+        const tweetObj = tweet as Tweet;
         return {
-          tokenId: tweet.tokenId,
-          content: tweet.content,
-          author: tweet.author,
+          ...tweetObj,
           timestamp: tweet.timestamp.toNumber() * 1000,
-          attachment: tweet.attachment || "",
         };
       });
     } else {
@@ -50,12 +42,7 @@ const MainContent = () => {
 
   const getFollowers = async (address: string): Promise<number> => {
     if (library !== undefined) {
-      const inteface = new utils.Interface(ABI.abi);
-      const contract = new Contract(
-        `${process.env.NEXT_PUBLIC_TWITTER_ETH_CONTRACT_ID}`,
-        inteface,
-        library?.getSigner()
-      );
+      const contract = contractClient(library);
       const followers = await contract.getFollowers(address);
       return followers?.length || 0;
     } else {
@@ -66,12 +53,7 @@ const MainContent = () => {
 
   const getFollowings = async (address: string): Promise<number> => {
     if (library !== undefined) {
-      const inteface = new utils.Interface(ABI.abi);
-      const contract = new Contract(
-        `${process.env.NEXT_PUBLIC_TWITTER_ETH_CONTRACT_ID}`,
-        inteface,
-        library?.getSigner()
-      );
+      const contract = contractClient(library);
       const followings = await contract.getFollowings(address);
       return followings?.length || 0;
     } else {
@@ -82,12 +64,7 @@ const MainContent = () => {
 
   const follow = async (address: string): Promise<boolean> => {
     if (library !== undefined) {
-      const inteface = new utils.Interface(ABI.abi);
-      const contract = new Contract(
-        `${process.env.NEXT_PUBLIC_TWITTER_ETH_CONTRACT_ID}`,
-        inteface,
-        library?.getSigner()
-      );
+      const contract = contractClient(library);
       await contract.follow(address);
       return true;
     } else {
@@ -98,12 +75,7 @@ const MainContent = () => {
 
   const unfollow = async (address: string): Promise<boolean> => {
     if (library !== undefined) {
-      const inteface = new utils.Interface(ABI.abi);
-      const contract = new Contract(
-        `${process.env.NEXT_PUBLIC_TWITTER_ETH_CONTRACT_ID}`,
-        inteface,
-        library?.getSigner()
-      );
+      const contract = contractClient(library);
       await contract.unfollow(address);
       return true;
     } else {
@@ -114,13 +86,21 @@ const MainContent = () => {
 
   const following = async (address: string): Promise<boolean> => {
     if (library !== undefined) {
-      const inteface = new utils.Interface(ABI.abi);
-      const contract = new Contract(
-        `${process.env.NEXT_PUBLIC_TWITTER_ETH_CONTRACT_ID}`,
-        inteface,
-        library?.getSigner()
-      );
+      const contract = contractClient(library);
       return await contract.isFollowing(address);
+    } else {
+      console.log("Library is undefined");
+      return false;
+    }
+  };
+
+  const addLike = async (tweet: Tweet): Promise<boolean> => {
+    if (library !== undefined && account) {
+      const contract = contractClient(library);
+      return await contract
+        .addLike(tweet.tokenId)
+        .then(() => true)
+        .catch((_) => false);
     } else {
       console.log("Library is undefined");
       return false;
@@ -249,8 +229,8 @@ const MainContent = () => {
                   <TweetBox
                     tweet={tweet}
                     key={tweet.timestamp}
-                    onClickLike={async () => {}}
-                    onClickRT={async () => {}}
+                    onClickLike={async () => addLike(tweet)}
+                    onClickRT={async () => addLike(tweet)}
                   />
                 ))
               )}

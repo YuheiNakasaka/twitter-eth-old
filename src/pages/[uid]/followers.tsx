@@ -6,10 +6,9 @@ import { Box, Flex, Text, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { User } from "models/user";
 import { SideBar, HeaderTabType } from "components/Sidebar";
-import { utils, Contract } from "ethers";
-import ABI from "resources/twitter-abi.json";
 import { FlatButton } from "components/FlatButton";
 import { useRouter } from "next/router";
+import { contractClient } from "utils/contract_client";
 
 const MainContent = () => {
   const router = useRouter();
@@ -20,12 +19,7 @@ const MainContent = () => {
 
   const getFollowers = async (address: string): Promise<User[]> => {
     if (library !== undefined) {
-      const inteface = new utils.Interface(ABI.abi);
-      const contract = new Contract(
-        `${process.env.NEXT_PUBLIC_TWITTER_ETH_CONTRACT_ID}`,
-        inteface,
-        library?.getSigner()
-      );
+      const contract = contractClient(library);
       const followings = await contract.getFollowers(address);
       return followings;
     } else {

@@ -41,13 +41,10 @@ const MainContent = () => {
       const contract = contractClient(library);
       const tweets = await contract.getTimeline(offset, limit);
       return tweets.map((tweet: any) => {
+        const tweetObj = tweet as Tweet;
         return {
-          tokenId: tweet.tokenId,
-          content: tweet.content,
-          author: tweet.author,
+          ...tweetObj,
           timestamp: tweet.timestamp.toNumber() * 1000,
-          attachment: tweet.attachment || "",
-          likes: tweet.likes,
         };
       });
     } else {

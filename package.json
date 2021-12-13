@@ -23,6 +23,7 @@
     "react-image-file-resizer": "^0.4.7"
   },
   "devDependencies": {
+    "@types/gtag.js": "^0.0.8",
     "@types/node": "16.11.12",
     "@types/nprogress": "^0.2.0",
     "@types/react": "17.0.37",

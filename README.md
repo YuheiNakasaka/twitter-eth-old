@@ -19,7 +19,7 @@ Contracts used in this app are frequently changing. Your tweet may not be displa
 - [x] Posting text tweets
 - [x] Uploading tiny images to on-chain
 - [x] Auto-Mint a tweet text as a NFT
-- [ ] Likes
+- [x] Likes
 - [ ] RTs
 - [ ] Mentions
 - [ ] Followings timeline

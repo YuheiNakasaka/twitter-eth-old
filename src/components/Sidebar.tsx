@@ -41,7 +41,7 @@ export const SideBar = ({ account, type }: SideBarProps) => {
           xl: "1rem",
         }}
       >
-        <Link href={`/playgrounds/twitter_eth`}>
+        <Link href={`/`}>
           <FlatButton>
             <Icon
               as={BsTwitter}
@@ -53,7 +53,7 @@ export const SideBar = ({ account, type }: SideBarProps) => {
           </FlatButton>
         </Link>
       </Flex>
-      <Link href={`/playgrounds/twitter_eth`}>
+      <Link href={`/`}>
         <FlatButton>
           <Flex
             p={{
@@ -80,7 +80,7 @@ export const SideBar = ({ account, type }: SideBarProps) => {
         </FlatButton>
       </Link>
       {account && (
-        <Link href={`/playgrounds/twitter_eth/${account}`}>
+        <Link href={`/${account}`}>
           <FlatButton>
             <Flex
               p={{

@@ -4,5 +4,5 @@ export type Tweet = {
   author: string;
   timestamp: number;
   attachment: string;
-  likes: number[]; // array of user addresses
+  likes: string[]; // array of user addresses
 };

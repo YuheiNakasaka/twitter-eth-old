@@ -298,8 +298,9 @@ const MainContent = () => {
               ) : (
                 tweets.map((tweet: Tweet) => (
                   <TweetBox
-                    tweet={tweet}
                     key={tweet.timestamp}
+                    tweet={tweet}
+                    myAddress={`${account}`}
                     onClickLike={async () => addLike(tweet)}
                     onClickRT={async () => addLike(tweet)}
                   />

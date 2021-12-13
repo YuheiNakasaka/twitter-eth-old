@@ -19,6 +19,7 @@ const MainContent = () => {
   const [tweets, setTweets] = useState<Tweet[]>([]);
   const [followings, setFollowings] = useState(0);
   const [followers, setFollowers] = useState(0);
+  const [likes, setLikes] = useState(0);
   const [isFollowing, setIsFollowing] = useState(false);
   const [fetching, setFetching] = useState(false);
   const [isOwner, setIsOnwer] = useState(false);
@@ -107,6 +108,17 @@ const MainContent = () => {
     }
   };
 
+  const getLikes = async (address: string): Promise<number> => {
+    if (library !== undefined) {
+      const contract = contractClient(library);
+      const likes = await contract.getLikes(address);
+      return likes?.length || 0;
+    } else {
+      console.log("Library is undefined");
+      return 0;
+    }
+  };
+
   const loadUserTweets = async (address: string) => {
     const tweets: Tweet[] = await getUserTweets(address);
     setTweets(tweets);
@@ -126,6 +138,9 @@ const MainContent = () => {
       });
       loadUserTweets(uid).finally(() => {
         setFetching(false);
+      });
+      getLikes(uid).then((likes) => {
+        setLikes(likes);
       });
       setIsOnwer(account?.toLowerCase() === uid.toLowerCase());
     }
@@ -186,6 +201,18 @@ const MainContent = () => {
                       </FlatButton>
                     </Link>
                   </Box>
+                  <Box ml="1rem">
+                    <Link href={`/${uid}/likes`} passHref>
+                      <FlatButton onClick={() => {}}>
+                        <Text>
+                          {likes}{" "}
+                          <chakra.span color="rgb(83, 100, 113)">
+                            likes
+                          </chakra.span>
+                        </Text>
+                      </FlatButton>
+                    </Link>
+                  </Box>
                 </Flex>
                 {account && !isOwner && !fetching && (
                   <Box textAlign="center">
@@ -227,8 +254,9 @@ const MainContent = () => {
               ) : (
                 tweets.map((tweet: Tweet) => (
                   <TweetBox
-                    tweet={tweet}
                     key={tweet.timestamp}
+                    tweet={tweet}
+                    myAddress={`${account}`}
                     onClickLike={async () => addLike(tweet)}
                     onClickRT={async () => addLike(tweet)}
                   />

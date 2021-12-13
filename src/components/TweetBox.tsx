@@ -15,12 +15,18 @@ export const HeaderTabType = {
 
 interface TweetBoxProps {
   tweet: Tweet;
-  onClickLike: () => Promise<boolean>;
-  onClickRT: () => Promise<boolean>;
+  myAddress: string;
+  onClickLike?: () => Promise<boolean>;
+  onClickRT?: () => Promise<boolean>;
 }
 
-export const TweetBox = ({ tweet, onClickLike, onClickRT }: TweetBoxProps) => {
-  const [isLiked, setIsLiked] = useState(tweet.likes.length > 0);
+export const TweetBox = ({
+  tweet,
+  myAddress,
+  onClickLike,
+  onClickRT,
+}: TweetBoxProps) => {
+  const [isLiked, setIsLiked] = useState(tweet.likes.includes(myAddress));
   const [likeCount, setLikeCount] = useState(tweet.likes.length);
   return (
     <Box
@@ -36,7 +42,7 @@ export const TweetBox = ({ tweet, onClickLike, onClickRT }: TweetBoxProps) => {
     >
       <Box p="1rem">
         <Flex mb="0.2rem">
-          <Link href={`/playgrounds/twitter_eth/${tweet.author}`} passHref>
+          <Link href={`/${tweet.author}`} passHref>
             <FlatButton>
               <Text fontSize="0.9rem" fontWeight="bold" isTruncated>
                 {tweet.author}
@@ -63,35 +69,37 @@ export const TweetBox = ({ tweet, onClickLike, onClickRT }: TweetBoxProps) => {
           </Flex>
         )}
         <Flex justifyContent="center" mt="1rem">
-          <FlatButton
-            onClick={() => {
-              if (!isLiked) {
-                onClickLike()
-                  .then((e) => {
-                    if (e) {
-                      setIsLiked(true);
-                      setLikeCount(likeCount + 1);
-                    }
-                  })
-                  .catch((e) => setIsLiked(false));
-              }
-            }}
-          >
-            <Flex>
-              <Icon
-                as={isLiked ? AiFillHeart : AiOutlineHeart}
-                fontSize="1.4rem"
-                color={isLiked ? "rgb(249, 24, 128)" : "rgb(83, 100, 113)"}
-                mr="0.5rem"
-              />
-              <Text
-                fontSize="0.9rem"
-                color={isLiked ? "rgb(249, 24, 128)" : "rgb(83, 100, 113)"}
-              >
-                {likeCount}
-              </Text>
-            </Flex>
-          </FlatButton>
+          {onClickLike && (
+            <FlatButton
+              onClick={() => {
+                if (!isLiked) {
+                  onClickLike()
+                    .then((e) => {
+                      if (e) {
+                        setIsLiked(true);
+                        setLikeCount(likeCount + 1);
+                      }
+                    })
+                    .catch((e) => setIsLiked(false));
+                }
+              }}
+            >
+              <Flex>
+                <Icon
+                  as={isLiked ? AiFillHeart : AiOutlineHeart}
+                  fontSize="1.4rem"
+                  color={isLiked ? "rgb(249, 24, 128)" : "rgb(83, 100, 113)"}
+                  mr="0.5rem"
+                />
+                <Text
+                  fontSize="0.9rem"
+                  color={isLiked ? "rgb(249, 24, 128)" : "rgb(83, 100, 113)"}
+                >
+                  {likeCount}
+                </Text>
+              </Flex>
+            </FlatButton>
+          )}
         </Flex>
       </Box>
     </Box>

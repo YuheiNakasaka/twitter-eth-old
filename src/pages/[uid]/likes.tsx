@@ -1,27 +1,32 @@
 import type { NextPage } from "next";
-import Link from "next/link";
 import Head from "next/head";
 import { useEthers } from "@usedapp/core";
 import { Box, Flex, Text, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { User } from "models/user";
 import { SideBar, HeaderTabType } from "components/Sidebar";
-import { FlatButton } from "components/FlatButton";
 import { useRouter } from "next/router";
 import { contractClient } from "utils/contract_client";
+import { TweetBox } from "components/TweetBox";
+import { Tweet } from "models/tweet";
 
 const MainContent = () => {
   const router = useRouter();
   const uid = router.query.uid?.toString() || "";
   const { account, library } = useEthers();
-  const [followings, setFollowings] = useState<User[]>([]);
+  const [tweets, setTweets] = useState<Tweet[]>([]);
   const [fetching, setFetching] = useState(false);
 
-  const getFollowings = async (address: string): Promise<User[]> => {
+  const getLikes = async (address: string): Promise<Tweet[]> => {
     if (library !== undefined) {
       const contract = contractClient(library);
-      const followings = await contract.getFollowings(address);
-      return followings;
+      const likes = await contract.getLikes(address);
+      return likes.map((tweet) => {
+        const tweetObj = tweet as Tweet;
+        return {
+          ...tweetObj,
+          timestamp: tweet.timestamp.toNumber() * 1000,
+        };
+      });
     } else {
       console.log("Library is undefined");
       return [];
@@ -31,9 +36,9 @@ const MainContent = () => {
   useEffect(() => {
     if (library !== undefined && uid !== "") {
       setFetching(true);
-      getFollowings(uid)
-        .then((followings) => {
-          setFollowings(followings);
+      getLikes(uid)
+        .then((tweet) => {
+          setTweets(tweet);
         })
         .finally(() => {
           setFetching(false);
@@ -64,7 +69,7 @@ const MainContent = () => {
             <Box borderBottom="1px solid #eee">
               <Box w="100%" px="1rem" p="1rem">
                 <Text fontSize="1.4rem" fontWeight="bold">
-                  Followings
+                  Likes
                 </Text>
                 <Text fontSize="0.5rem" isTruncated>
                   {uid}
@@ -77,34 +82,12 @@ const MainContent = () => {
                   <Spinner color="#1DA1F2" size="lg" />
                 </Box>
               ) : (
-                followings.map((user: User) => (
-                  <Box
-                    key={user.id}
-                    w={{
-                      base: "100vw",
-                      sm: "100%",
-                      md: "100%",
-                      lg: "100%",
-                      xl: "100%",
-                    }}
-                    borderBottom="1px solid #eee"
-                  >
-                    <Box p="1rem">
-                      <Flex mb="0.2rem">
-                        <Link href={`/${user.id}`} passHref>
-                          <FlatButton>
-                            <Text
-                              fontSize="0.9rem"
-                              fontWeight="bold"
-                              isTruncated
-                            >
-                              {user.id}
-                            </Text>
-                          </FlatButton>
-                        </Link>
-                      </Flex>
-                    </Box>
-                  </Box>
+                tweets.map((tweet: Tweet) => (
+                  <TweetBox
+                    key={tweet.timestamp}
+                    tweet={tweet}
+                    myAddress={`${account}`}
+                  />
                 ))
               )}
             </Box>
@@ -115,7 +98,7 @@ const MainContent = () => {
   );
 };
 
-const Followings: NextPage = () => {
+const Likes: NextPage = () => {
   return (
     <>
       <Head>
@@ -126,4 +109,4 @@ const Followings: NextPage = () => {
   );
 };
 
-export default Followings;
+export default Likes;

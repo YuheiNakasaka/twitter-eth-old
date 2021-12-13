@@ -1,7 +1,9 @@
-import Document, { Html, Head, Main, NextScript } from "next/document";
+import NextDocument, { Html, Head, Main, NextScript } from "next/document";
 import * as gtag from "utils/gtag";
 
-class MyDocument extends Document {
+type Props = {};
+
+class Document extends NextDocument<Props> {
   render() {
     return (
       <Html lang="en">
@@ -31,4 +33,4 @@ class MyDocument extends Document {
   }
 }
 
-export default MyDocument;
+export default Document;

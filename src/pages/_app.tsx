@@ -6,6 +6,9 @@ import "nprogress/nprogress.css";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import * as gtag from "utils/gtag";
+import Layout from "layouts/Layout";
+
+nprogress.configure({ showSpinner: false, speed: 400, minimum: 0.25 });
 
 function MyApp({ Component, pageProps }: AppProps) {
   if (process.browser) {
@@ -29,7 +32,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ChakraProvider>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </ChakraProvider>
   );
 }

@@ -4,7 +4,7 @@ import { FlatButton } from "components/FlatButton";
 import { Tweet } from "models/tweet";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart, AiOutlineComment } from "react-icons/ai";
 import { BsPersonCircle } from "react-icons/bs";
 import { useState } from "react";
 import { CircleAvatar } from "./CircleAvatar";
@@ -20,6 +20,7 @@ interface TweetBoxProps {
   myAddress: string;
   onClickLike?: () => Promise<boolean>;
   onClickRT?: () => Promise<boolean>;
+  onClickComment?: () => Promise<boolean>;
 }
 
 export const TweetBox = ({
@@ -27,6 +28,7 @@ export const TweetBox = ({
   myAddress,
   onClickLike,
   onClickRT,
+  onClickComment,
 }: TweetBoxProps) => {
   const [isLiked, setIsLiked] = useState(tweet.likes.includes(myAddress));
   const [likeCount, setLikeCount] = useState(tweet.likes.length);
@@ -87,6 +89,20 @@ export const TweetBox = ({
           </Flex>
         )}
         <Flex justifyContent="end" mt="1rem">
+          {onClickComment && (
+            <Link href={`/${tweet.author}/tweets/${tweet.tokenId}`} passHref>
+              <FlatButton onClick={() => {}}>
+                <Flex>
+                  <Icon
+                    as={AiOutlineComment}
+                    fontSize="1.4rem"
+                    color={"rgb(83, 100, 113)"}
+                    mr="1rem"
+                  />
+                </Flex>
+              </FlatButton>
+            </Link>
+          )}
           {onClickLike && (
             <FlatButton
               onClick={() => {

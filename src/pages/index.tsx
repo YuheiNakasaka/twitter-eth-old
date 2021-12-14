@@ -304,6 +304,7 @@ const MainContent = () => {
                     myAddress={`${account}`}
                     onClickLike={async () => addLike(tweet)}
                     onClickRT={async () => addLike(tweet)}
+                    onClickComment={async () => addLike(tweet)}
                   />
                 ))
               )}

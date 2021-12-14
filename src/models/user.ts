@@ -1,3 +1,4 @@
-export interface User {
+export type User = {
   id: string;
-}
+  iconUrl: string;
+};

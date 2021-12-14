@@ -106,6 +106,7 @@ const MainContent = () => {
           contract.on(filters(), (author: string, _: string) => {
             updateTweets();
             if (author === account) {
+              console.log(`Eq: ${author}`);
               toast.closeAll();
               toast({
                 title: "Tweet confirmed successfully!",

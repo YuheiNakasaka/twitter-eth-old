@@ -16,8 +16,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "types": ["@cloudflare/workers-types"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "functions"],
   "exclude": ["node_modules"]
 }

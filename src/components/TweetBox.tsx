@@ -4,8 +4,10 @@ import { FlatButton } from "components/FlatButton";
 import { Tweet } from "models/tweet";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { AiFillHeart, AiOutlineHeart, AiOutlineRetweet } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { BsPersonCircle } from "react-icons/bs";
 import { useState } from "react";
+import { CircleAvatar } from "./CircleAvatar";
 dayjs.extend(relativeTime);
 
 export const HeaderTabType = {
@@ -41,22 +43,38 @@ export const TweetBox = ({
       borderBottom="1px solid #eee"
     >
       <Box p="1rem">
-        <Flex mb="0.2rem">
+        <Flex mb="1rem">
+          {tweet.iconUrl != "" ? (
+            <Link href={`/${tweet.author}`} passHref>
+              <FlatButton>
+                <CircleAvatar iconUrl={tweet.iconUrl} size="2.3rem" />
+              </FlatButton>
+            </Link>
+          ) : (
+            <Link href={`/${tweet.author}`} passHref>
+              <FlatButton>
+                <Icon as={BsPersonCircle} fontSize="2.3rem" />
+              </FlatButton>
+            </Link>
+          )}
           <Link href={`/${tweet.author}`} passHref>
             <FlatButton>
-              <Text fontSize="0.9rem" fontWeight="bold" isTruncated>
+              <Text fontSize="0.9rem" fontWeight="bold" ml="1rem" isTruncated>
                 {tweet.author}
               </Text>
             </FlatButton>
           </Link>
-          <Text
-            fontSize="0.9rem"
-            ml="0.5rem"
-            color="rgb(83, 100, 113)"
-            isTruncated
-          >
-            {dayjs(tweet.timestamp).fromNow()}
-          </Text>
+          <FlatButton>
+            <Text
+              fontSize="0.9rem"
+              fontWeight="normal"
+              ml="0.5rem"
+              color="rgb(83, 100, 113)"
+              isTruncated
+            >
+              {dayjs(tweet.timestamp).fromNow()}
+            </Text>
+          </FlatButton>
         </Flex>
         <Text fontSize="1rem">{tweet.content}</Text>
         {tweet.attachment && (

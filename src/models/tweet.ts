@@ -5,4 +5,5 @@ export type Tweet = {
   timestamp: number;
   attachment: string;
   likes: string[]; // array of user addresses
+  iconUrl: string;
 };

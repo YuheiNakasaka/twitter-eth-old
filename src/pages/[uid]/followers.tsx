@@ -2,13 +2,15 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import Head from "next/head";
 import { useEthers } from "@usedapp/core";
-import { Box, Flex, Text, Spinner } from "@chakra-ui/react";
+import { Box, Flex, Text, Spinner, Icon } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { User } from "models/user";
 import { SideBar, HeaderTabType } from "components/Sidebar";
 import { FlatButton } from "components/FlatButton";
 import { useRouter } from "next/router";
 import { contractClient } from "utils/contract_client";
+import { CircleAvatar } from "components/CircleAvatar";
+import { BsPersonCircle } from "react-icons/bs";
 
 const MainContent = () => {
   const router = useRouter();
@@ -91,11 +93,28 @@ const MainContent = () => {
                   >
                     <Box p="1rem">
                       <Flex mb="0.2rem">
+                        {user.iconUrl != "" ? (
+                          <Link href={`/${user.id}`} passHref>
+                            <FlatButton>
+                              <CircleAvatar
+                                iconUrl={user.iconUrl}
+                                size="2.3rem"
+                              />
+                            </FlatButton>
+                          </Link>
+                        ) : (
+                          <Link href={`/${user.id}`} passHref>
+                            <FlatButton>
+                              <Icon as={BsPersonCircle} fontSize="2.3rem" />
+                            </FlatButton>
+                          </Link>
+                        )}
                         <Link href={`/${user.id}`} passHref>
                           <FlatButton>
                             <Text
                               fontSize="0.9rem"
                               fontWeight="bold"
+                              ml="1rem"
                               isTruncated
                             >
                               {user.id}

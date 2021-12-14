@@ -223,7 +223,10 @@ const MainContent = () => {
                     if (uid === account) {
                       setFetchingNFTs(true);
                       onOpen();
-                      getNFTs(`${account}`, "eth")
+                      getNFTs(
+                        `${account}`,
+                        `${process.env.NEXT_PUBLIC_CHAIN_ID}`
+                      )
                         .then((items) => {
                           const nfts = items.result.map((item) => {
                             const metadata = item.metadata as NFTMetaData;

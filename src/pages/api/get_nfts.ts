@@ -105,17 +105,17 @@ export default async function handler(
         console.log(
           `https://deep-index.moralis.io/api/v2/${parsedInput}/nft?chain=${chain}&format=decimal`
         );
-        // const response: GetNFTResponse = await fetch(
-        //   `https://deep-index.moralis.io/api/v2/${parsedInput}/nft?chain=${chain}&format=decimal`,
-        //   {
-        //     method: "GET",
-        //     headers: {
-        //       Accept: "application/json",
-        //       "X-API-Key": `${process.env.MOLARIS_REST_API_KEY}`,
-        //     },
-        //   }
-        // ).then((res) => res.json());
-        const response = mockObject;
+        const response: GetNFTResponse = await fetch(
+          `https://deep-index.moralis.io/api/v2/${parsedInput}/nft?chain=${chain}&format=decimal`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "X-API-Key": `${process.env.MOLARIS_REST_API_KEY}`,
+            },
+          }
+        ).then((res) => res.json());
+        // const response = mockObject;
         const result = response.result
           .filter((item) => item.metadata != null)
           .map((item) => {

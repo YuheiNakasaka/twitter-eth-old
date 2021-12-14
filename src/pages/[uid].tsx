@@ -17,7 +17,6 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  Image,
 } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/button";
 import { useEffect, useRef, useState } from "react";
@@ -46,8 +45,9 @@ const MainContent = () => {
   const [nfts, setNFTs] = useState<string[]>([]);
   const [profileIcon, setProfileIcon] = useState("");
   const [isFollowing, setIsFollowing] = useState(false);
-  const [fetching, setFetching] = useState(false);
   const [isOwner, setIsOnwer] = useState(false);
+  const [fetchingTweet, setFetchingTweet] = useState(false);
+  const [fetchingNFTs, setFetchingNFTs] = useState(false);
 
   const getUserTweets = async (address: string): Promise<Tweet[]> => {
     if (library !== undefined) {
@@ -173,7 +173,7 @@ const MainContent = () => {
 
   useEffect(() => {
     if (library !== undefined && uid !== "") {
-      setFetching(true);
+      setFetchingTweet(true);
       following(uid).then((status) => {
         setIsFollowing(status);
       });
@@ -184,7 +184,7 @@ const MainContent = () => {
         setFollowings(count);
       });
       loadUserTweets(uid).finally(() => {
-        setFetching(false);
+        setFetchingTweet(false);
       });
       getLikes(uid).then((likes) => {
         setLikes(likes);
@@ -221,6 +221,8 @@ const MainContent = () => {
                 <FlatButton
                   onClick={async () => {
                     if (uid === account) {
+                      setFetchingNFTs(true);
+                      onOpen();
                       getNFTs(`${account}`, "eth")
                         .then((items) => {
                           const nfts = items.result.map((item) => {
@@ -230,7 +232,9 @@ const MainContent = () => {
                           setNFTs([...nfts]);
                         })
                         .catch((err) => console.log(err))
-                        .finally(() => onOpen());
+                        .finally(() => {
+                          setFetchingNFTs(false);
+                        });
                     }
                   }}
                 >
@@ -288,7 +292,7 @@ const MainContent = () => {
                     </Link>
                   </Box>
                 </Flex>
-                {account && !isOwner && !fetching && (
+                {account && !isOwner && !fetchingTweet && (
                   <Box textAlign="center">
                     {isFollowing ? (
                       <Button
@@ -321,7 +325,7 @@ const MainContent = () => {
               </Box>
             </Box>
             <Box>
-              {fetching ? (
+              {fetchingTweet ? (
                 <Box textAlign="center" p="1rem">
                   <Spinner color="#1DA1F2" size="lg" />
                 </Box>
@@ -353,7 +357,7 @@ const MainContent = () => {
           <ModalCloseButton />
           <ModalBody>
             <Flex flexWrap="wrap" justifyContent="center">
-              {nfts.length > 0 &&
+              {!fetchingNFTs ? (
                 nfts.map((nft) => (
                   <Box key={nft} m="1em" style={{ display: "inline-block" }}>
                     <FlatButton
@@ -367,7 +371,13 @@ const MainContent = () => {
                       <CircleAvatar iconUrl={nft} size="150px" />
                     </FlatButton>
                   </Box>
-                ))}
+                ))
+              ) : (
+                <Box textAlign="center" p="1rem">
+                  <Spinner color="#1DA1F2" size="lg" />
+                  <Text>Searching your NFTs...</Text>
+                </Box>
+              )}
             </Flex>
           </ModalBody>
           <ModalFooter>

@@ -1,6 +1,6 @@
 # Twitter on Ethereum
 
-[Demo](https://twitter-eth.pages.dev/)
+[Demo](https://twitter-eth.vercel.app/)
 
 For starting this dapp, What you have to do is to **connect your wallet**. That's it!
 

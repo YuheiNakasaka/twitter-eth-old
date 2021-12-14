@@ -23,7 +23,7 @@ Contracts used in this app are frequently changing. Your tweet may not be displa
 - [ ] RTs
 - [ ] Mentions
 - [ ] Followings timeline
-- [ ] NFT Icon
+- [x] NFT Icon
 
 ## Getting Started
 

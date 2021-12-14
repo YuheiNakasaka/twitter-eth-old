@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { Flex, Text, Icon } from "@chakra-ui/react";
+import { Flex, Text, Icon, Spacer } from "@chakra-ui/react";
 import { RiHome7Line, RiHome7Fill } from "react-icons/ri";
 import { BsPerson, BsPersonFill, BsTwitter } from "react-icons/bs";
+import { FaEthereum } from "react-icons/fa";
 import { FlatButton } from "components/FlatButton";
 
 export const HeaderTabType = {
@@ -107,6 +108,27 @@ export const SideBar = ({ account, type }: SideBarProps) => {
           </FlatButton>
         </Link>
       )}
+      <Spacer />
+      <FlatButton>
+        <Flex
+          p={{
+            base: "1rem",
+            xl: "0 1rem 1rem 1rem",
+          }}
+        >
+          <Icon as={FaEthereum} mr="1rem" fontSize="1.5rem" />
+          <Text
+            fontSize="1rem"
+            fontWeight={"normal"}
+            display={{
+              base: "none",
+              xl: "block",
+            }}
+          >
+            Ropsten
+          </Text>
+        </Flex>
+      </FlatButton>
     </Flex>
   );
 };

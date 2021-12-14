@@ -643,11 +643,6 @@
   dependencies:
     "@chakra-ui/utils" "1.9.1"
 
-"@cloudflare/workers-types@^3.2.0":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@cloudflare/workers-types/-/workers-types-3.2.0.tgz#df300466f5f8a03b205bdd533990017b0538496e"
-  integrity sha512-y0+f7QeB5/fMMdU0wSwvBB18yE9kAD2s7Wben8a4uI4f/EJyE+eJrai5QO52Pq8EmWP0vRpKqZh0qU857WhY2A==
-
 "@ctrl/tinycolor@^3.4.0":
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/@ctrl/tinycolor/-/tinycolor-3.4.0.tgz#c3c5ae543c897caa9c2a68630bed355be5f9990f"

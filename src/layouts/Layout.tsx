@@ -1,16 +1,5 @@
 import { ReactNode } from "react";
 import Head from "next/head";
-import { ChainId, DAppProvider, Config } from "@usedapp/core";
-
-const config: Config = {
-  readOnlyChainId: ChainId.Hardhat,
-  readOnlyUrls: {
-    [ChainId.Hardhat]: "http://localhost:8545",
-  },
-  multicallAddresses: {
-    [ChainId.Hardhat]: "http://localhost:8545",
-  },
-};
 
 type LayoutProps = {
   title?: string;
@@ -47,7 +36,7 @@ const Layout = ({ title, children }: LayoutProps) => {
         </style>
       </Head>
 
-      <DAppProvider config={config}>{children}</DAppProvider>
+      {children}
     </>
   );
 };

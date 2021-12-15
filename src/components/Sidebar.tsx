@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Flex, Text, Icon, Spacer } from "@chakra-ui/react";
+import { Flex, Box, Text, Icon, Spacer } from "@chakra-ui/react";
 import { RiHome7Line, RiHome7Fill } from "react-icons/ri";
 import { BsPerson, BsPersonFill, BsTwitter } from "react-icons/bs";
 import { FaEthereum } from "react-icons/fa";
@@ -37,98 +37,117 @@ export const SideBar = ({ account, type }: SideBarProps) => {
       }}
     >
       <Flex
-        p={{
-          base: "1rem 1rem 1rem 1rem",
-          xl: "1rem",
+        h={{
+          base: "auto",
+          xl: "100vh",
+        }}
+        flexDir={{
+          base: "row",
+          xl: "column",
+        }}
+        position={{
+          base: "relative",
+          xl: "fixed",
+        }}
+        top={{
+          base: "auto",
+          xl: 0,
         }}
       >
+        <Flex
+          p={{
+            base: "1rem 1rem 1rem 1rem",
+            xl: "1rem",
+          }}
+        >
+          <Link href={`/`} passHref>
+            <FlatButton>
+              <Icon
+                as={BsTwitter}
+                mr="1rem"
+                fontSize="2rem"
+                fontWeight="bold"
+                color="#1DA1F2"
+              />
+            </FlatButton>
+          </Link>
+        </Flex>
         <Link href={`/`} passHref>
-          <FlatButton>
-            <Icon
-              as={BsTwitter}
-              mr="1rem"
-              fontSize="2rem"
-              fontWeight="bold"
-              color="#1DA1F2"
-            />
-          </FlatButton>
-        </Link>
-      </Flex>
-      <Link href={`/`} passHref>
-        <FlatButton>
-          <Flex
-            p={{
-              base: "1rem",
-              xl: "1rem",
-            }}
-          >
-            <Icon
-              as={type == HeaderTabType.Home ? RiHome7Fill : RiHome7Line}
-              mr="1rem"
-              fontSize="2rem"
-            />
-            <Text
-              fontSize="1.4rem"
-              fontWeight={type == HeaderTabType.Home ? "bold" : "normal"}
-              display={{
-                base: "none",
-                xl: "block",
-              }}
-            >
-              Home
-            </Text>
-          </Flex>
-        </FlatButton>
-      </Link>
-      {account && (
-        <Link href={`/${account}`} passHref>
           <FlatButton>
             <Flex
               p={{
                 base: "1rem",
-                xl: "0 1rem 1rem 1rem",
+                xl: "1rem",
               }}
             >
               <Icon
-                as={type == HeaderTabType.Profile ? BsPersonFill : BsPerson}
+                as={type == HeaderTabType.Home ? RiHome7Fill : RiHome7Line}
                 mr="1rem"
                 fontSize="2rem"
               />
               <Text
                 fontSize="1.4rem"
-                fontWeight={type == HeaderTabType.Profile ? "bold" : "normal"}
+                fontWeight={type == HeaderTabType.Home ? "bold" : "normal"}
                 display={{
                   base: "none",
                   xl: "block",
                 }}
               >
-                Profile
+                Home
               </Text>
             </Flex>
           </FlatButton>
         </Link>
-      )}
-      <Spacer />
-      <FlatButton>
-        <Flex
-          p={{
-            base: "1rem",
-            xl: "0 1rem 1rem 1rem",
-          }}
-        >
-          <Icon as={FaEthereum} mr="1rem" fontSize="1.5rem" />
-          <Text
-            fontSize="1rem"
-            fontWeight={"normal"}
-            display={{
-              base: "none",
-              xl: "block",
+        {account && (
+          <Link href={`/${account}`} passHref>
+            <FlatButton>
+              <Flex
+                p={{
+                  base: "1rem",
+                  xl: "0 1rem 1rem 1rem",
+                }}
+              >
+                <Icon
+                  as={type == HeaderTabType.Profile ? BsPersonFill : BsPerson}
+                  mr="1rem"
+                  fontSize="2rem"
+                />
+                <Text
+                  fontSize="1.4rem"
+                  fontWeight={type == HeaderTabType.Profile ? "bold" : "normal"}
+                  display={{
+                    base: "none",
+                    xl: "block",
+                  }}
+                >
+                  Profile
+                </Text>
+              </Flex>
+            </FlatButton>
+          </Link>
+        )}
+        <Spacer />
+        <FlatButton>
+          <Flex
+            p={{
+              base: "1rem",
+              xl: "0 1rem 1rem 1rem",
             }}
           >
-            Ropsten
-          </Text>
-        </Flex>
-      </FlatButton>
+            <Icon as={FaEthereum} mr="1rem" fontSize="1.5rem" />
+            <Text
+              fontSize="1rem"
+              fontWeight={"normal"}
+              display={{
+                base: "none",
+                xl: "block",
+              }}
+            >
+              Ropsten
+            </Text>
+          </Flex>
+        </FlatButton>
+      </Flex>
     </Flex>
   );
 };

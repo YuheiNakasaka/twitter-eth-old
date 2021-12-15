@@ -82,9 +82,9 @@ const MainContent = () => {
                   <Spinner color="#1DA1F2" size="lg" />
                 </Box>
               ) : (
-                tweets.map((tweet: Tweet) => (
+                tweets.map((tweet: Tweet, i: number) => (
                   <TweetBox
-                    key={tweet.timestamp}
+                    key={`${tweet.timestamp}_${i}`}
                     tweet={tweet}
                     myAddress={`${account}`}
                   />

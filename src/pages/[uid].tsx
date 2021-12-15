@@ -133,6 +133,19 @@ const MainContent = () => {
     }
   };
 
+  const addRT = async (tweet: Tweet): Promise<boolean> => {
+    if (library !== undefined && account) {
+      const contract = contractClient(library);
+      return await contract
+        .addRetweet(tweet.tokenId)
+        .then(() => true)
+        .catch((_) => false);
+    } else {
+      console.log("Library is undefined");
+      return false;
+    }
+  };
+
   const getLikes = async (address: string): Promise<number> => {
     if (library !== undefined) {
       const contract = contractClient(library);
@@ -333,13 +346,13 @@ const MainContent = () => {
                   <Spinner color="#1DA1F2" size="lg" />
                 </Box>
               ) : (
-                tweets.map((tweet: Tweet) => (
+                tweets.map((tweet: Tweet, i: number) => (
                   <TweetBox
-                    key={tweet.timestamp}
+                    key={`${tweet.timestamp}_${i}`}
                     tweet={tweet}
                     myAddress={`${account}`}
                     onClickLike={async () => addLike(tweet)}
-                    onClickRT={async () => addLike(tweet)}
+                    onClickRT={async () => addRT(tweet)}
                   />
                 ))
               )}
@@ -361,8 +374,12 @@ const MainContent = () => {
           <ModalBody>
             <Flex flexWrap="wrap" justifyContent="center">
               {!fetchingNFTs ? (
-                nfts.map((nft) => (
-                  <Box key={nft} m="1em" style={{ display: "inline-block" }}>
+                nfts.map((nft, i) => (
+                  <Box
+                    key={`${nft}_${i}`}
+                    m="1em"
+                    style={{ display: "inline-block" }}
+                  >
                     <FlatButton
                       onClick={async () => {
                         const resp = await changeIcon(nft);

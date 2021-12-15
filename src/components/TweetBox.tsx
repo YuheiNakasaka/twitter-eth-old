@@ -4,7 +4,12 @@ import { FlatButton } from "components/FlatButton";
 import { Tweet } from "models/tweet";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { AiFillHeart, AiOutlineHeart, AiOutlineComment } from "react-icons/ai";
+import {
+  AiFillHeart,
+  AiOutlineHeart,
+  AiOutlineComment,
+  AiOutlineRetweet,
+} from "react-icons/ai";
 import { BsPersonCircle } from "react-icons/bs";
 import { useState } from "react";
 import { CircleAvatar } from "./CircleAvatar";
@@ -32,9 +37,11 @@ export const TweetBox = ({
 }: TweetBoxProps) => {
   const [isLiked, setIsLiked] = useState(tweet.likes.includes(myAddress));
   const [likeCount, setLikeCount] = useState(tweet.likes.length);
+  const [isRT, setIsRT] = useState(tweet.retweets.includes(myAddress));
+  const [rtCount, setRTCount] = useState(tweet.retweets.length);
   return (
     <Box
-      key={tweet.timestamp}
+      key={`${tweet.timestamp}_${tweet.retweets.length}`}
       w={{
         base: "100vw",
         sm: "100%",
@@ -45,6 +52,20 @@ export const TweetBox = ({
       borderBottom="1px solid #eee"
     >
       <Box p="1rem">
+        {!tweet.retweetedBy.startsWith(
+          "0x0000000000000000000000000000000000000000"
+        ) && (
+          <Flex pb="1rem">
+            <Icon
+              as={AiOutlineRetweet}
+              fontSize="1rem"
+              color="rgb(83, 100, 113)"
+            />
+            <Text fontSize="0.7rem" color="rgb(83, 100, 113)">
+              {tweet.retweetedBy} retweeted
+            </Text>
+          </Flex>
+        )}
         <Flex mb="1rem">
           {tweet.iconUrl != "" ? (
             <Link href={`/${tweet.author}`} passHref>
@@ -88,7 +109,7 @@ export const TweetBox = ({
             />
           </Flex>
         )}
-        <Flex justifyContent="end" mt="1rem">
+        <Flex justifyContent="space-evenly" w="100%" mt="1rem">
           {onClickComment && (
             <Link href={`/${tweet.author}/tweets/${tweet.tokenId}`} passHref>
               <FlatButton onClick={() => {}}>
@@ -102,6 +123,37 @@ export const TweetBox = ({
                 </Flex>
               </FlatButton>
             </Link>
+          )}
+          {onClickRT && (
+            <FlatButton
+              onClick={() => {
+                if (!isRT) {
+                  onClickRT()
+                    .then((e) => {
+                      if (e) {
+                        setIsRT(true);
+                        setRTCount(rtCount + 1);
+                      }
+                    })
+                    .catch((e) => setIsRT(false));
+                }
+              }}
+            >
+              <Flex>
+                <Icon
+                  as={AiOutlineRetweet}
+                  fontSize="1.4rem"
+                  color={isRT ? "rgb(249, 24, 128)" : "rgb(83, 100, 113)"}
+                  mr="0.5rem"
+                />
+                <Text
+                  fontSize="0.9rem"
+                  color={isRT ? "rgb(249, 24, 128)" : "rgb(83, 100, 113)"}
+                >
+                  {rtCount}
+                </Text>
+              </Flex>
+            </FlatButton>
           )}
           {onClickLike && (
             <FlatButton

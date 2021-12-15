@@ -91,6 +91,19 @@ const MainContent = () => {
     }
   };
 
+  const addRT = async (tweet: Tweet): Promise<boolean> => {
+    if (library !== undefined && account) {
+      const contract = contractClient(library);
+      return await contract
+        .addRetweet(tweet.tokenId)
+        .then(() => true)
+        .catch((_) => false);
+    } else {
+      console.log("Library is undefined");
+      return false;
+    }
+  };
+
   const updateTweets = async () => {
     const tweets: Tweet[] = await getTimelineTweets(0, 100);
     setTweets(tweets);
@@ -103,7 +116,7 @@ const MainContent = () => {
       const filters = contract.filters["Tweeted"];
       if (filters !== undefined) {
         provider.once("block", () => {
-          contract.on(filters(), (author: string, _: string) => {
+          contract.on(filters(), (author: string) => {
             updateTweets();
             if (author === account) {
               console.log(`Eq: ${author}`);
@@ -297,14 +310,18 @@ const MainContent = () => {
                   <Spinner color="#1DA1F2" size="lg" />
                 </Box>
               ) : (
-                tweets.map((tweet: Tweet) => (
+                tweets.map((tweet: Tweet, i: number) => (
                   <TweetBox
-                    key={tweet.timestamp}
+                    key={`${tweet.timestamp}_${i}`}
                     tweet={tweet}
                     myAddress={`${account}`}
                     onClickLike={async () => addLike(tweet)}
-                    onClickRT={async () => addLike(tweet)}
-                    onClickComment={async () => addLike(tweet)}
+                    onClickRT={async () => addRT(tweet)}
+                    onClickComment={async () =>
+                      new Promise((resolve) => {
+                        resolve(true);
+                      })
+                    }
                   />
                 ))
               )}

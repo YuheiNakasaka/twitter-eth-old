@@ -115,7 +115,7 @@ const MainContent = () => {
       const filters = contract.filters["Commented"];
       if (filters !== undefined) {
         provider.once("block", () => {
-          contract.on(filters(), (author: string, _: string) => {
+          contract.on(filters(), (author: string) => {
             updateComments(tokenId);
             if (author === account) {
               toast.closeAll();

@@ -13,6 +13,7 @@ import {
 import { BsPersonCircle } from "react-icons/bs";
 import { useState } from "react";
 import { CircleAvatar } from "./CircleAvatar";
+import { Anchorme } from "react-anchorme";
 dayjs.extend(relativeTime);
 
 export const HeaderTabType = {
@@ -99,7 +100,17 @@ export const TweetBox = ({
             </Text>
           </FlatButton>
         </Flex>
-        <Text fontSize="1rem">{tweet.content}</Text>
+        <Anchorme
+          truncate={40}
+          target="_blank"
+          rel="noreferrer noopener"
+          style={{
+            color: "rgb(83, 100, 113)",
+            fontSize: "1rem",
+          }}
+        >
+          {tweet.content}
+        </Anchorme>
         {tweet.attachment && (
           <Flex justifyContent="center" my="1rem">
             <Image

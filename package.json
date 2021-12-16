@@ -18,6 +18,7 @@
     "next": "12.0.7",
     "nprogress": "^0.2.0",
     "react": "17.0.2",
+    "react-anchorme": "^2.2.1",
     "react-dom": "17.0.2",
     "react-icons": "^4.3.1",
     "react-image-file-resizer": "^0.4.7"

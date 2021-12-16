@@ -25,7 +25,7 @@ import { contractClient, contractProvider } from "utils/contract_client";
 
 const MainContent = () => {
   const toast = useToast();
-  const { activateBrowserWallet, account, library } = useEthers();
+  const { activateBrowserWallet, account, library, active } = useEthers();
   const [tweetInput, setTweetInput] = useState("");
   const [tweetInputImage, setTweetInputImage] = useState("");
   const [tweets, setTweets] = useState<Tweet[]>([]);
@@ -147,6 +147,13 @@ const MainContent = () => {
       subscribeTweeted();
     }
   }, [library]);
+
+  useEffect(() => {
+    console.log(`active: ${active}`);
+    if (!active) {
+      setTweets([]);
+    }
+  }, [active]);
 
   return (
     <>
@@ -324,6 +331,22 @@ const MainContent = () => {
                     }
                   />
                 ))
+              )}
+              {!active && !account && (
+                <Box position="relative" w="100%" pt="56.25%">
+                  <iframe
+                    src="https://www.youtube.com/embed/Sj0kGnNSmKY"
+                    title="YouTube video player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    style={{
+                      position: "absolute",
+                      top: "0",
+                      left: "0",
+                      width: "100%",
+                      height: "100%",
+                    }}
+                  ></iframe>
+                </Box>
               )}
             </Box>
           </Flex>

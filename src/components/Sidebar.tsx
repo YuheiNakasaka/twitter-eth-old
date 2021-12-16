@@ -191,7 +191,8 @@ export const SideBar = ({ account, type }: SideBarProps) => {
                 </Heading>
                 <Text>
                   Twitter ETH is a new dapp like the Twitter. The all data
-                  exists full on-chain, so all action required much gas fee.
+                  exists full on-chain, so all action required very high gas
+                  fee😎
                 </Text>
               </Box>
               <Box mb="1rem">
